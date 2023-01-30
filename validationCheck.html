@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <form id="formData">
+        <h1>장소</h1>
+        <input type="text" name="place">
+        <h1>매니져이름</h1>
+        <input type="text" name="manager">
+        <h1>방문자</h1>
+        <input type="text" name="visitor">
+    </form>
+    <button type="button" id="btnFormSave" style="width:100%">저장</button>
+
+    <p id="formText"></p>
+    <p id="errorText" style="color:red;"></p>
+
+
+    <script src="/formValid.js"></script>
+
+    <script>
+
+        const formText = document.querySelector('#formText');
+        const errorText = document.querySelector('#errorText');
+
+        document.querySelector('#btnFormSave').addEventListener('click', function () {
+            // dataJson {객체}로 받음
+            let formJson = {
+                place: document.querySelector('[name="place"]').value,
+                manager: document.querySelector('[name="manager"]').value,
+                visitor: document.querySelector('[name="visitor"]').value,
+            }
+
+            //dataJson 체크해야할 key값과 문자(text)
+            let checkValidationObj = [
+                { name: 'place', text: '장소' },
+                { name: 'manager', text: '매니져이름' },
+                { name: 'visitor', text: '방문자' },
+            ];
+
+            errorText.innerHTML = '';
+            formText.innerHTML = '';
+            if (checkValidation(formJson, checkValidationObj)) {
+                // console.log('저장완료');
+                errorText.innerHTML = '저장완료';
+            }
+        });
+
+
+
+
+        //jquery
+        // $('#btnFormSave').on('click', function () {
+        //     //dataJson {객체}로 받음  (formdata 나)
+        //     let dataJson = {
+        //         place: $('[name="place"]').val(),
+        //         manager: $('[name="manager"]').val(),
+        //         visitor: $('[name="visitor"]').val(),
+        //     }
+        //     //dataJson 체크해야할 key값과 문자(text)
+        //     let checkValidationObj = [
+        //         { name: 'place', text: '장소' },
+        //         { name: 'manager', text: '매니져이름' },
+        //         { name: 'visitor', text: '방문자' },
+        //     ];
+
+
+        //     if (checkValidation(dataJson, checkValidationObj)) {
+        //         console.log('저장완료');
+        //     }
+
+        // })
+
+
+
+
+
+
+
+
+        //비슷한..
+        /**
+         * form의 필수요소값 체크 + 해당내용 입력swal기능.
+         * key 배열일때는 값이 있을때만(length != 0 ) formData에 추가.
+         * @param requiredFormObject 필수입력요소 { 'name' : '입력사항이름'} : object 
+         * @param formData  :object
+         * @returns : boolean
+         */
+        function checkIsFormFull(requiredFormObject, formData, text) {
+            let isFormFull = false;
+            let txt = text || '입력';
+            for (const key in requiredFormObject) {
+                isFormFull = true;
+                if (!formData[key]) {
+                    isFormFull = false;
+                    swal2Alert(`${requiredFormObject[key]} 을/를 ${txt}해주세요.`, 3, function () {
+                    });
+                    break;
+                }
+            }
+            return isFormFull;
+        }
+
+        //사용 예시
+        // const formData = $('#programform').serializeObject();
+        // //필수입력 내용
+        // const requiredFormData1 = {
+        //     'uname': '프로그램명',
+        //     'pgtype': '구분',
+        //     'place': '장소',
+        //     'coordinator': '진행자',
+        //     'content': '프로그램내용',
+        // }
+
+        // if (checkIsFormFull(requiredFormData1, formData)) {
+        //     //<<---------------------- 저장 -------------------------->>
+        // }
+    </script>
+</body>
+
+</html>
